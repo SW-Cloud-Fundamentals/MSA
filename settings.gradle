@@ -1,0 +1,9 @@
+rootProject.name = 'Scene_BE'
+
+include 'apps:discovery'
+include 'apps:apigateway'
+include 'apps:user-service'
+include 'apps:article-service'
+include 'apps:sentiment-service'
+
+include 'libs:jwt_util'
