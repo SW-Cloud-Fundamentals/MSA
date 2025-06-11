@@ -47,6 +47,7 @@ public class CommentService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         Comment comment = Comment.fromRequestDto(requestDto, username, role, article);
+        comment.updateEvent("CREATE");
 
         rankService.updateScore(requestDto.getArticleId(), 0, +1);
 
@@ -71,7 +72,7 @@ public class CommentService {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        List<Comment> comments = commentRepository.findByArticleId(article);
+        List<Comment> comments = commentRepository.findByArticleIdAndDeletedFalse(article);
         return comments.stream()
                 .map(ResponseCommentDto::dto)
                 .collect(Collectors.toList());
@@ -96,6 +97,7 @@ public class CommentService {
         }
 
         comment.setContent(requestDto.getContent());
+        comment.updateEvent("UPDATE");
 
         Comment updated = commentRepository.save(comment);
 
@@ -104,7 +106,7 @@ public class CommentService {
 
     // ✅ 댓글 삭제
     @Transactional
-    public void deleteComment(Long commentId, String token) {
+    public ResponseCommentDto deleteComment(Long commentId, String token) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
@@ -114,10 +116,13 @@ public class CommentService {
             throw new CustomException(ErrorCode.USER_NOT_OWNER);
         }
 
-        commentRepository.deleteById(commentId);
+        comment.updateEvent("DELETE");
+        comment.setDeleted(true);
+
         Article article = comment.getArticleId();
         article.setCommentCount(Math.max(0, article.getCommentCount() - 1));
 
 //        rankService.updateScore(requestDto.getArticleId(), 0, -1);
+        return ResponseCommentDto.dto(comment);
     }
 }

@@ -18,18 +18,18 @@ public class KafkaProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public CommentMessage send(String topic, CommentMessage commentMessage) {
+    public CommentMessage send(String topic, CommentMessage dto) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonInString = "";
         try {
-            jsonInString = mapper.writeValueAsString(commentMessage);
+            jsonInString = mapper.writeValueAsString(dto);
         } catch (JsonProcessingException ex) {
             ex.printStackTrace();
         }
 
         kafkaTemplate.send(topic, jsonInString);
-        log.info("Kafka Producer sent data from the sentiment-microservice: " + commentMessage);
+        log.info("Kafka Producer sent data from the article-microservice: " + dto);
 
-        return commentMessage;
+        return dto;
     }
 }

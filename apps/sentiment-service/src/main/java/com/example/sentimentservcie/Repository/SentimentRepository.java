@@ -4,7 +4,11 @@ import com.example.sentimentservcie.Model.SentimentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SentimentRepository extends JpaRepository<SentimentEntity, Long> {
     List<SentimentEntity> findByArticleId(Long articleId);
+    Optional<SentimentEntity> findByCommentIdAndArticleId(Long commentId, Long articleId);
+    Optional<SentimentEntity> findByCommentId(Long commentId);
+    void deleteByCommentIdAndArticleId(Long commentId, Long articleId);
 }

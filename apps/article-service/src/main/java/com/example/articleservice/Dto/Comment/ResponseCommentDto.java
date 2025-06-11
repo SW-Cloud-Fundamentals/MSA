@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ResponseCommentDto {
     private Long id;
+    private String eventType;
     private String content;
     private String username;
     private String role;
@@ -23,6 +24,7 @@ public class ResponseCommentDto {
     public static ResponseCommentDto dto(Comment comment) {
         return ResponseCommentDto.builder()
                 .id(comment.getId())
+                .eventType(comment.getEventType())
                 .content(comment.getContent())
                 .username(comment.getUsername())
                 .role(comment.getRole())

@@ -19,6 +19,10 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // CREATE || UPDATE || DELETE
+    @Column
+    private String eventType;
+
     @Column(nullable = false)
     private String username;
 
@@ -35,10 +39,30 @@ public class Comment implements Serializable {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column
+    private LocalDateTime updatedAt;
+
+    @Column
+    private boolean deleted = false;
+
+    /** INSERT 직전 → 두 컬럼 모두 now() */
     @PrePersist
     public void prePersist() {
-        this.createdAt = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
     }
+
+    /** UPDATE 직전 → updatedAt 만 now() */
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+//    @PreRemove
+//    public void preRemove() {
+//        this.updatedAt = LocalDateTime.now();
+//    }
 
     public static Comment fromRequestDto(RequestCommentDto requestDto, String username, String role, Article article) {
         return Comment.builder()
@@ -47,5 +71,9 @@ public class Comment implements Serializable {
                 .role(role)
                 .articleId(article)
                 .build();
+    }
+
+    public void updateEvent(String eventType) {
+        this.eventType = eventType;
     }
 }

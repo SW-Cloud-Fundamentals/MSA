@@ -9,6 +9,7 @@ import com.example.articleservice.Service.CommentService;
 import com.example.articleservice.messagequeue.KafkaProducer;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/comments")
 @RequiredArgsConstructor
+@Slf4j
 public class CommentController {
 
     private final CommentService commentService;
@@ -34,9 +36,19 @@ public class CommentController {
 
         ResponseCommentDto response = commentService.createComment(dto, token);
 
-        CommentMessage commentMessage = CommentMessage.converter("create", response);
-        /* send this order to the kafka */
-        kafkaProducer.send("my_topic_comments", commentMessage);
+        CommentMessage event = CommentMessage.builder()
+                .id(response.getId())
+                .eventType(response.getEventType())
+                .articleId(response.getArticleId())
+                .content(response.getContent())
+                .username(response.getUsername())
+                .userRole(response.getRole())
+                .build();
+
+        log.info("🚀 PRODUCE : {}", event);
+
+        /* send this comment to the kafka */
+        kafkaProducer.send("my_topic_comments", event);
 
         return ResponseEntity.ok(new ResponseDTO<>(ResponseCode.SUCCESS_CREATE_COMMENT, response));
     }
@@ -63,6 +75,21 @@ public class CommentController {
         String token = authHeader.substring("Bearer ".length());
 
         ResponseCommentDto updatedComment = commentService.updateComment(commentId, requestDto, token);
+
+        CommentMessage event = CommentMessage.builder()
+                .id(updatedComment.getId())
+                .eventType(updatedComment.getEventType())
+                .articleId(updatedComment.getArticleId())
+                .content(updatedComment.getContent())
+                .username(updatedComment.getUsername())
+                .userRole(updatedComment.getRole())
+                .build();
+
+        log.info("🚀 PRODUCE : {}", event);
+
+        /* send this comment to the kafka */
+        kafkaProducer.send("my_topic_comments", event);
+
         return ResponseEntity.ok(new ResponseDTO<>(ResponseCode.SUCCESS_UPDATE_COMMENT, updatedComment));
     }
 
@@ -72,7 +99,23 @@ public class CommentController {
                                                            @RequestHeader("Authorization") String authHeader) {
         String token = authHeader.substring("Bearer ".length());
 
-        commentService.deleteComment(commentId, token);
+        ResponseCommentDto deleted = commentService.deleteComment(commentId, token);
+
+        /* ① Kafka 이벤트 객체 생성 */
+        CommentMessage event = CommentMessage.builder()
+                .id(deleted.getId())
+                .eventType(deleted.getEventType())
+                .articleId(deleted.getArticleId())
+                .content(deleted.getContent())
+                .username(deleted.getUsername())
+                .userRole(deleted.getRole())
+                .build();
+
+        log.info("🚀 PRODUCE : {}", event);
+
+        /* send this comment to the kafka */
+        kafkaProducer.send("my_topic_comments", event);
+
         return ResponseEntity.status(ResponseCode.SUCCESS_COMMENT_DELETE.getStatus().value())
                 .body(new ResponseDTO<>(ResponseCode.SUCCESS_COMMENT_DELETE, null));
     }

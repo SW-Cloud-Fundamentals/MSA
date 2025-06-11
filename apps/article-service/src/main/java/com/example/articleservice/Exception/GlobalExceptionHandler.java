@@ -46,20 +46,6 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponseDTO(ErrorCode.BAD_REQUEST, errors));
     }
 
-    @ExceptionHandler(CodeExpiredException.class)
-    protected ResponseEntity<ErrorResponseDTO> handleCodeExpiredException(final CodeExpiredException e) {
-        return ResponseEntity
-                .status(ErrorCode.CODE_EXPIRED.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.CODE_EXPIRED));
-    }
-
-    @ExceptionHandler(UnverifiedCodeException.class)
-    protected ResponseEntity<ErrorResponseDTO> handleUnverifiedCodeException(final UnverifiedCodeException e) {
-        return ResponseEntity
-                .status(ErrorCode.UNVERIFIED_CODE.getStatus().value())
-                .body(new ErrorResponseDTO(ErrorCode.UNVERIFIED_CODE));
-    }
-
     /**
      * 우리가 만든 CustomException 공통 처리
      */
