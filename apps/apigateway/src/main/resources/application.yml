@@ -1,0 +1,145 @@
+server:
+  port: 8000
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+spring:
+  application:
+    name: apigateway
+
+  cloud:
+    gateway:
+      routes:
+#        User
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/signup/**
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/users/**
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/users
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/users/me
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/users/login
+            - Method=OPTIONS
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
+#        Article
+        - id: article-service
+          uri: lb://ARTICLE-SERVICE
+          predicates:
+            - Path=/article-service/news/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/article-service/(?<segment>.*), /$\{segment}
+#        Comments
+        - id: article-service
+          uri: lb://ARTICLE-SERVICE
+          predicates:
+            - Path=/article-service/comments/**
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/article-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+        - id: article-service
+          uri: lb://ARTICLE-SERVICE
+          predicates:
+            - Path=/article-service/comments/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/article-service/(?<segment>.*), /$\{segment}
+        - id: article-service
+          uri: lb://ARTICLE-SERVICE
+          predicates:
+            - Path=/article-service/comments/**
+            - Method=PUT
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/article-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+        - id: article-service
+          uri: lb://ARTICLE-SERVICE
+          predicates:
+            - Path=/article-service/comments/**
+            - Method=DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/article-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+#         Likes
+        - id: article-service
+          uri: lb://ARTICLE-SERVICE
+          predicates:
+            - Path=/article-service/articles/**
+            - Method=POST, GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/article-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+#         Rank
+        - id: article-service
+          uri: lb://ARTICLE-SERVICE
+          predicates:
+            - Path=/article-service/rank/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/article-service/(?<segment>.*), /$\{segment}
+
+#         Sentiment
+        - id: sentiment-service
+          uri: lb://SENTIMENT-SERVICE
+          predicates:
+            - Path=/sentiment-service/sentiments/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/sentiment-service/(?<segment>.*), /$\{segment}
+
+
+  jwt:
+    secret: ${spring.jwt.secret}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, busrefresh

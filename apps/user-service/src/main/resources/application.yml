@@ -1,0 +1,45 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: user-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/scene?serverTimezone=Asia/Seoul
+    username: root
+    password: ${spring.datasource.password}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${spring.mail.username}
+    password: ${spring.mail.password}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.ssl.trust: smtp.gmail.com
+      mail.debug: true
+
+  jwt:
+    secret: ${spring.jwt.secret}
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, busrefresh
