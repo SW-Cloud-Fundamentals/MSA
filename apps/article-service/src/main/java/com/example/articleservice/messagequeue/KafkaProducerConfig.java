@@ -12,6 +12,10 @@ import org.springframework.kafka.core.ProducerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Kafka Producer 연결 객체를 만들기 위한 Config 파일
+ * 어노테이션 EnableKafka를 통해 관련된 Bean을 등록하고 관련 설정을 활성화해 줄 수 있습니다.
+ * */
 @EnableKafka
 @Configuration
 public class KafkaProducerConfig {

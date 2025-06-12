@@ -59,11 +59,6 @@ public class Comment implements Serializable {
         this.updatedAt = LocalDateTime.now();
     }
 
-//    @PreRemove
-//    public void preRemove() {
-//        this.updatedAt = LocalDateTime.now();
-//    }
-
     public static Comment fromRequestDto(RequestCommentDto requestDto, String username, String role, Article article) {
         return Comment.builder()
                 .content(requestDto.getContent())

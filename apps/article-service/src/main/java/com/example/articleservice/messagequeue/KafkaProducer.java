@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+/**
+ * Kafka에 메시지를 전송하는 기능을 수행하는 클래스
+ */
 @Service
 @Slf4j
 public class KafkaProducer {

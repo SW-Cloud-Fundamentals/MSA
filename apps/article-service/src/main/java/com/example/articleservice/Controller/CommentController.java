@@ -24,7 +24,10 @@ public class CommentController {
     private final CommentService commentService;
     private final KafkaProducer kafkaProducer;
 
-    // ✅ 특정 기사 ID에 대한 댓글 생성
+    /**
+     * 1️⃣ 특정 기사 ID에 대한 댓글 생성
+     * Kafka zookeeper, server, jdbc connector 서버 필요
+     * */
     @PostMapping("/{articleId}")
     public ResponseEntity<ResponseDTO<ResponseCommentDto>> createComment(
             @PathVariable Long articleId,
@@ -53,21 +56,24 @@ public class CommentController {
         return ResponseEntity.ok(new ResponseDTO<>(ResponseCode.SUCCESS_CREATE_COMMENT, response));
     }
 
-    // ✅ 전체 댓글 조회
+    /** 2️⃣ 전체 댓글 조회 */
     @GetMapping
     public ResponseEntity<ResponseDTO<List<ResponseCommentDto>>> getAllComments() {
         List<ResponseCommentDto> response = commentService.getAllComments();
         return ResponseEntity.ok(new ResponseDTO<>(ResponseCode.SUCCESS_GET_COMMENT, response));
     }
 
-    // ✅ 특정 기사 ID의 댓글 목록 조회
+    /** 3️⃣ 특정 기사 ID의 댓글 목록 조회 */
     @GetMapping("/{articleId}")
     public ResponseEntity<ResponseDTO<List<ResponseCommentDto>>> getCommentsByArticleId(@PathVariable Long articleId) {
         List<ResponseCommentDto> response = commentService.getCommentsByArticleId(articleId);
         return ResponseEntity.ok(new ResponseDTO<>(ResponseCode.SUCCESS_GET_COMMENT, response));
     }
 
-    // ✅ 댓글 수정
+    /**
+     * 4️⃣ 댓글 수정
+     * Kafka zookeeper, server, jdbc connector 서버 필요
+     * */
     @PutMapping("/{commentId}")
     public ResponseEntity<ResponseDTO<ResponseCommentDto>> updateComment(@PathVariable Long commentId,
                                                                          @RequestBody RequestCommentDto requestDto,
@@ -93,7 +99,10 @@ public class CommentController {
         return ResponseEntity.ok(new ResponseDTO<>(ResponseCode.SUCCESS_UPDATE_COMMENT, updatedComment));
     }
 
-    // ✅ 댓글 삭제
+    /**
+     * 5️⃣ 댓글 삭제
+     * Kafka zookeeper, server, jdbc connector 서버 필요
+     * */
     @DeleteMapping("/{commentId}")
     public ResponseEntity<ResponseDTO<Void>> deleteComment(@PathVariable Long commentId,
                                                            @RequestHeader("Authorization") String authHeader) {

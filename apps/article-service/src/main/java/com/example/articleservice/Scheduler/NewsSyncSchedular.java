@@ -14,10 +14,11 @@ import java.time.LocalDateTime;
 public class NewsSyncSchedular {
     private final NewsSearchService newsSearchService;
 
+    /** 매 30분마다 실행 (cron: 초 분 시 일 월 요일) */
     @Scheduled(cron = "0 */30 * * * *")
     public void everyFiveMinutes() {
         LocalDateTime now = LocalDateTime.now();
         newsSearchService.syncFromNaver();
-        log.debug("Article Update at {}", now);
+        log.debug("💨 Article Update at {}", now);
     }
 }

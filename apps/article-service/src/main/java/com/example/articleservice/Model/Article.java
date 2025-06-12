@@ -46,6 +46,7 @@ public class Article implements Serializable {
     @Column(nullable = false)
     private Long commentCount = 0L;
 
+    /** INSERT 직전 → createdAt 을 now() */
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

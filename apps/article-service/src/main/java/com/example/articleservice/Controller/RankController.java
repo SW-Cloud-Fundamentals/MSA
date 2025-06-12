@@ -16,6 +16,7 @@ public class RankController {
 
     private final RankService rankService;
 
+    /** 1️⃣ 내림차순 상위 10개의 articleId 값들 조회 */
     @GetMapping
     public List<Long> top(@RequestParam(defaultValue = "10") int size) {
         return rankService.topN(size);

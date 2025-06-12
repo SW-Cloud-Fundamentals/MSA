@@ -10,13 +10,11 @@ import com.example.articleservice.Repository.ArticleRepository;
 import com.example.articleservice.Repository.CommentRepository;
 import com.example.jwt_util.util.JWTUtil;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,7 +26,12 @@ public class CommentService {
     private final JWTUtil jwtUtil;
     private final RankService rankService;
 
-    // ✅ 댓글 생성
+    /**
+     * 1️⃣ 댓글 생성
+     * @param requestDto 댓글 작성 요청 DTO
+     * @param token      Authorization 헤더에서 추출한 JWT(“Bearer ” 제거 후 값)
+     * @return ResponseCommentDto 저장된 댓글 정보 DTO
+     */
     public ResponseCommentDto createComment(RequestCommentDto requestDto,
                                             String token) {
 
@@ -36,6 +39,7 @@ public class CommentService {
             throw new CustomException(ErrorCode.CONTENT_EMPTY);
         }
 
+        // 200자 이상이면 ❌
         if (requestDto.getContent().length() > 200) {
             throw new CustomException(ErrorCode.COMMENT_CONTENT_OUTNUMBER);
         }
@@ -47,8 +51,8 @@ public class CommentService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         Comment comment = Comment.fromRequestDto(requestDto, username, role, article);
-        comment.updateEvent("CREATE");
-
+        comment.updateEvent("CREATE");  // Kafka에 보낼 eventType 설정
+        // 랭킹 시스템에 댓글 추가 전달
         rankService.updateScore(requestDto.getArticleId(), 0, +1);
 
         try {
@@ -60,25 +64,29 @@ public class CommentService {
         }
     }
 
-    // ✅ 전체 댓글 조회
+    /** 2️⃣ 전체 댓글 조회 */
     public List<ResponseCommentDto> getAllComments() {
         return commentRepository.findAll().stream()
                 .map(ResponseCommentDto::dto)
                 .collect(Collectors.toList());
     }
 
-    // ✅ 기사 ID로 댓글 조회
+    /** 3️⃣ 기사 ID로 댓글 조회 */
     public List<ResponseCommentDto> getCommentsByArticleId(Long articleId) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-
+        // Comment(Entity)의 필드값인 deleted가 False인 댓글만 찾아옴
         List<Comment> comments = commentRepository.findByArticleIdAndDeletedFalse(article);
         return comments.stream()
                 .map(ResponseCommentDto::dto)
                 .collect(Collectors.toList());
     }
 
-    // ✅ 댓글 수정
+    /**
+     * 4️⃣ 댓글 수정
+     * – 작성자 본인인지 검증 후 내용 수정
+     * – Kafka 이벤트 타입을 UPDATE 로 지정
+     */
     @Transactional
     public ResponseCommentDto updateComment(Long commentId, RequestCommentDto requestDto,
                                             String token) {
@@ -97,14 +105,19 @@ public class CommentService {
         }
 
         comment.setContent(requestDto.getContent());
-        comment.updateEvent("UPDATE");
+        comment.updateEvent("UPDATE");  // Kafka에 보낼 eventType 설정
 
         Comment updated = commentRepository.save(comment);
 
         return ResponseCommentDto.dto(updated);
     }
 
-    // ✅ 댓글 삭제
+    /**
+     * 5️⃣ 댓글 삭제 (Soft‑delete) 패턴 사용
+     * – 실제 레코드는 지우지 않고 deleted=true로 표기
+     * – 배치 스케줄러가 주기적으로 물리 삭제 수행
+     * – 랭킹 점수 ‑1 반영
+     */
     @Transactional
     public ResponseCommentDto deleteComment(Long commentId, String token) {
         Comment comment = commentRepository.findById(commentId)
@@ -116,13 +129,17 @@ public class CommentService {
             throw new CustomException(ErrorCode.USER_NOT_OWNER);
         }
 
-        comment.updateEvent("DELETE");
+        comment.updateEvent("DELETE");  // Kafka에 보낼 eventType 설정
+        /*
+         * 삭제될 댓글이라는 것을 명시하기 위해 deleted 필드 true로 설정
+         * 스케쥴러에서 deleted 필드가 true인 댓글들 일괄적으로 삭제
+         */
         comment.setDeleted(true);
 
         Article article = comment.getArticleId();
         article.setCommentCount(Math.max(0, article.getCommentCount() - 1));
 
-//        rankService.updateScore(requestDto.getArticleId(), 0, -1);
+        rankService.updateScore(article.getId(), 0, -1);    // 랭킹 시스템에 댓글 삭제 전달
         return ResponseCommentDto.dto(comment);
     }
 }

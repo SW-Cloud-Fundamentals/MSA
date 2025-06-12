@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/** 댓글과 관련된 모든 api 호출 시에 반환 될 json dto */
 @Getter
 @Builder
 @NoArgsConstructor

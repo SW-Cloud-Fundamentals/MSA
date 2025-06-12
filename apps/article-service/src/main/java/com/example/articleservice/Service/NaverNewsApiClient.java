@@ -20,7 +20,7 @@ public class NaverNewsApiClient {
 
     private WebClient webClient;
 
-    private int display = 20;
+    private int display = 20;     // 한 번 api 호출 할 때 20개의 기사를 가져옴
     private String sort = "date"; // date = 날짜순, sim = 정확도순
 
     @PostConstruct  // 빈이 생성되고 의존성 주입이 끝난 뒤에 자동으로 실행

@@ -108,7 +108,7 @@ spring:
         - id: article-service
           uri: lb://ARTICLE-SERVICE
           predicates:
-            - Path=/article-service/articles/**
+            - Path=/article-service/articles/like/**
             - Method=POST, GET
           filters:
             - RemoveRequestHeader=Cookie

@@ -3,6 +3,7 @@ package com.example.apigateway.config;
 import com.example.apigateway.filter.JwtReactiveAuthenticationWebFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -30,6 +31,14 @@ public class SecurityConfig {
                 .cors(cors -> {}) // CORS 활성화
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers("/user-service/users/me").authenticated()
+                        .pathMatchers(HttpMethod.POST,
+                                "/article-service/comments/**").authenticated()
+                        .pathMatchers(HttpMethod.PUT,
+                                "/article-service/comments/**").authenticated()
+                        .pathMatchers(HttpMethod.DELETE,
+                                "/article-service/comments/**").authenticated()
+                        .pathMatchers(HttpMethod.POST,
+                                "/article-service/articles/like/**").authenticated()
                         .anyExchange().permitAll()
                 );
 

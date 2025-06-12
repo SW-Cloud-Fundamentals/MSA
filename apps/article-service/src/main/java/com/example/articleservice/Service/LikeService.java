@@ -20,6 +20,7 @@ public class LikeService {
     private final JWTUtil jwtUtil;
     private final RankService rankService;
 
+    /** 1️⃣ 공감 생성 */
     @Transactional
     public void likeArticle(Long articleId, String token) {
         String username = jwtUtil.getUsername(token);
@@ -44,6 +45,7 @@ public class LikeService {
         rankService.updateScore(articleId, +1, 0);
     }
 
+    /** 2️⃣ 공감 취소 */
     @Transactional
     public void cancelLike(Long articleId, String token) {
         String username = jwtUtil.getUsername(token);
@@ -56,12 +58,13 @@ public class LikeService {
 
         likeRepository.delete(like);
 
-        // ✅ 공감 수 감소
+        // 공감 수 감소
         article.setLikes(Math.max(0, article.getLikes() - 1));
 
         rankService.updateScore(articleId, -1, 0);
     }
 
+    /** 3️⃣ 특정 기사의 공감 수 조회 */
     public Long countLikes(Long articleId) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
@@ -69,6 +72,7 @@ public class LikeService {
         return likeRepository.countByArticle(article);
     }
 
+    /** 4️⃣ 특정 유저의 공감 || 비공감 상태 조회 */
     public boolean hasUserLikedArticle(Article article, String token) {
         String username = jwtUtil.getUsername(token);
 

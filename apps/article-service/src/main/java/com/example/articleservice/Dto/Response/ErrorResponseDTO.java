@@ -14,9 +14,8 @@ public class ErrorResponseDTO {
     private String message; // 메시지 어떤 오류인지 전달
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> errors;
-    // 예시로 레시피를 등록하는데 제목은 . 만 적고, 레시피는 비워뒀다면?
-    // 제목은 . 만 적을 수 없습니다. (예시로, 최소 10글자 이상 적어주어야 합니다.)
-    // 레시피는 비어있을 수 없습니다.
+    // 예시로 댓글을 등록하는데 내용은 비워둔다면?
+    // 내용은 비어있을 수 없습니다.
 
     // 라고 응답을 보내기 위한 매핑임.
     // entity 필드를 매핑해서 어떤 필드에서 오류가 났는지 응답으로 전달함.

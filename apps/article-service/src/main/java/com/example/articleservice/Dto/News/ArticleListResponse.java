@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+/** 네이버 뉴스 api로 가져온 기사 정보들을 담아 반환할 dto 입니다.
+ * List로 된 기사들을 조회할 때 사용됩니다.
+ * */
 @Builder
 @Getter
 @AllArgsConstructor

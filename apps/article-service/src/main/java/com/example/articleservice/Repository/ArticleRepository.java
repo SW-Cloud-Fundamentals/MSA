@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
     boolean existsByLink(String link);
-    List<Article> findAllByOrderByIdDesc();
+
     Optional<Article> findByLink(String link);
 
     List<Article> findByKeywordOrderByPubDate(String keyword);

@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/articles")
+@RequestMapping("/articles/like")
 public class LikeController {
 
     private final LikeService likeService;
     private final ArticleRepository articleRepository;
 
-    // ✅ 공감 토글 엔드포인트
-    @PostMapping("/like/{articleId}")
+    /** 1️⃣ 공감 토글 엔드포인트 */
+    @PostMapping("/{articleId}")
     public ResponseEntity<ResponseLike> like(@PathVariable Long articleId,
                                              @RequestHeader("Authorization") String authHeader) {
         String token = authHeader.substring("Bearer ".length());
@@ -41,8 +41,8 @@ public class LikeController {
         );
     }
 
-    // ✅ 좋아요 상태 + 수 조회
-    @GetMapping("/like/{articleId}")
+    /** 2️⃣ 공감 상태 + 수 조회 */
+    @GetMapping("/{articleId}")
     public ResponseEntity<ResponseLike> getLike(@PathVariable Long articleId,
                                                 @RequestHeader("Authorization") String authHeader) {
         boolean liked = false;

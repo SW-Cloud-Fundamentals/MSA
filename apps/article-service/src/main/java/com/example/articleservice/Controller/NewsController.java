@@ -15,6 +15,7 @@ import java.util.List;
 public class NewsController {
     private final NewsSearchService newsSearchService;
 
+    /** 1️⃣ 사용자가 입력한 키워드를 지정한 기사들 조회 */
     @GetMapping
     public ResponseEntity<List<ArticleListResponse>> searchList(
             @RequestParam(required = false, defaultValue = "마약") String keyword
@@ -22,11 +23,13 @@ public class NewsController {
         return ResponseEntity.ok(newsSearchService.searchList(keyword));
     }
 
+    /** 2️⃣ articleId 값으로 해당 기사의 상세정보 조회 */
     @GetMapping("/{articleId}")
     public ResponseEntity<ArticleDetail> searchDetail(@PathVariable("articleId") Long articleId) {
         return ResponseEntity.ok(newsSearchService.searchDetail(articleId));
     }
 
+    /** 3️⃣ 사용자가 입력한 키워드와 날짜에 맞는 기사들 조회 */
     @GetMapping("/search")
     public ResponseEntity<List<ArticleListResponse>> searchByKeywordAndDate(
             @RequestParam String keyword,
