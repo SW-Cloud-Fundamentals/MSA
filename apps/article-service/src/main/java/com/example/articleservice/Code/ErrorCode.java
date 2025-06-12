@@ -21,16 +21,13 @@ public enum ErrorCode {
     /**
      * 403 FORBIDDEN: 권한 없음
      */
-    ACCESS_DENIED(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
     USER_NOT_OWNER(HttpStatus.FORBIDDEN, "댓글 작성자만 수정 또는 삭제할 수 있습니다."),
 
     /**
      * 404 NOT FOUND
      */
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
-    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."),
-    NICKNAME_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 닉네임을 가진 사용자를 찾을 수 없습니다."),
+    ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "뉴스를 찾을 수 없습니다."),
     LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "공감하지 않은 게시글입니다"),
     ALREADY_LIKED(HttpStatus.NOT_FOUND, "이미 공감하였습니다."),
     /**

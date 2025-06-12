@@ -12,6 +12,10 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Kafka Consumer 연결 객체를 만들기 위한 Config 파일
+ * 어노테이션 EnableKafka를 통해 관련된 Bean을 등록하고 관련 설정을 활성화
+ */
 @EnableKafka
 @Configuration
 public class KafkaConsumerConfig {

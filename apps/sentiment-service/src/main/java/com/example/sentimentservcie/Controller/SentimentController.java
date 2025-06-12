@@ -20,12 +20,16 @@ public class SentimentController {
 
     private final SentimentService sentimentService;
 
+    /**
+     * 기사 ID로 감성 통계 조회
+     * @param articleId 대상 기사 ID
+     * @return 감성 통계 리스트(작성자 role별 등 분리 가능)
+     */
     @GetMapping("/{articleId}")
     public ResponseEntity<ResponseDTO<List<ArticleSentimentSummary>>> getSentimentSummary(@PathVariable Long articleId) {
 
         List<ArticleSentimentSummary> summaries = sentimentService.getSentimentSummary(articleId);
 
-        // 📣 수정 필요
-        return ResponseEntity.ok(new ResponseDTO<>(ResponseCode.SUCCESS_GET_COMMENT, summaries));
+        return ResponseEntity.ok(new ResponseDTO<>(ResponseCode.SUCCESS_GET_SENTIMENT, summaries));
     }
 }

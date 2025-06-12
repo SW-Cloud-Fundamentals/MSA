@@ -48,7 +48,7 @@ public class CommentService {
         String username = jwtUtil.getUsername(token);
 
         Article article = articleRepository.findById(requestDto.getArticleId())
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND));
 
         Comment comment = Comment.fromRequestDto(requestDto, username, role, article);
         comment.updateEvent("CREATE");  // Kafka에 보낼 eventType 설정
@@ -74,7 +74,7 @@ public class CommentService {
     /** 3️⃣ 기사 ID로 댓글 조회 */
     public List<ResponseCommentDto> getCommentsByArticleId(Long articleId) {
         Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND));
         // Comment(Entity)의 필드값인 deleted가 False인 댓글만 찾아옴
         List<Comment> comments = commentRepository.findByArticleIdAndDeletedFalse(article);
         return comments.stream()

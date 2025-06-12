@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface EmailVerificationRepository extends JpaRepository<EmailVerification, Long> {
 
     Optional<EmailVerification> findByEmail(String email);
-    void deleteByEmail(String email);
+
     void deleteAllByExpiryBefore(LocalDateTime time);
 }
 

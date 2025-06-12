@@ -29,9 +29,8 @@ public enum ResponseCode {
      * Like
      */
 
-    SUCCESS_LIKE(HttpStatus.OK, "공감이 완료되었습니다."),
-    SUCCESS_LIKE_COUNT(HttpStatus.OK, "공감 수를 확인했습니다."),
-    SUCCESS_CANCEL_LIKE(HttpStatus.OK, "게시글 공감을 취소했습니다.");
+    SUCCESS_LIKE(HttpStatus.OK, "공감이 완료 또는 취소 되었습니다."),
+    SUCCESS_LIKE_COUNT(HttpStatus.OK, "공감 수를 확인했습니다.");
 
     private final HttpStatus status;
     private final String message;

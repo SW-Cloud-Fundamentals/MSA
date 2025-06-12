@@ -39,31 +39,7 @@ public enum ResponseCode {
     SUCCESS_LOGOUT(HttpStatus.OK, "성공적으로 로그아웃했습니다."),
     SUCCESS_DELETE_USER(HttpStatus.OK, "유저가 성공적으로 삭제되었습니다."),
     SUCCESS_EMAIL_USER_SEND(HttpStatus.OK, "유저 이메일 인증번호를 전송했습니다."),
-    SUCCESS_EMAIL_USER_ACCEPT(HttpStatus.OK, "유저 이메일 인증을 성공했습니다."),
-
-    /**
-     * Episode, Comment
-     */
-
-    SUCCESS_CREATE_POST(HttpStatus.OK, "게시글을 성공적으로 등록했습니다."),
-    SUCCESS_CREATE_COMMENT(HttpStatus.OK, "댓글을 성공적으로 등록했습니다."),
-
-    SUCCESS_POST_DELETE(HttpStatus.OK, "게시글을 성공적으로 삭제했습니다."),
-    SUCCESS_COMMENT_DELETE(HttpStatus.OK, "댓글을 성공적으로 삭제했습니다."),
-
-    SUCCESS_GET_POST(HttpStatus.OK, "게시글을 성공적으로 조회했습니다."),
-    SUCCESS_GET_COMMENT(HttpStatus.OK, "댓글을 성공적으로 조회했습니다."),
-
-    SUCCESS_UPDATE_POST(HttpStatus.OK, "게시글을 성공적으로 수정했습니다."),
-    SUCCESS_UPDATE_COMMENT(HttpStatus.OK, "댓글을 성공적으로 수정했습니다."),
-
-    /**
-     * Like
-     */
-
-    SUCCESS_LIKE(HttpStatus.OK, "공감 완료되었습니다."),
-    SUCCESS_LIKE_COUNT(HttpStatus.OK, "공감 수를 확인했습니다."),
-    SUCCESS_CANCEL_LIKE(HttpStatus.OK, "게시글 공감을 취소했습니다.");
+    SUCCESS_EMAIL_USER_ACCEPT(HttpStatus.OK, "유저 이메일 인증을 성공했습니다.");
 
     private final HttpStatus status;
     private final String message;

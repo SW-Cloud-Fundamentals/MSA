@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
     private final EmailService emailService;
 
-    /** 인증번호 전송 */
+    /** [경찰] 인증번호 전송 */
     @PostMapping("/signup/police/email")
     public ResponseEntity<ResponseDTO<?>> sendPolice(@RequestBody @Valid EmailRequestDto dto) {
         emailService.sendPoliceCode(dto.getEmail());
@@ -28,7 +28,7 @@ public class EmailController {
                 .body(new ResponseDTO<>(ResponseCode.SUCCESS_EMAIL_POLICE_SEND, null));
     }
 
-    /** 인증번호 확인 */
+    /** [경찰] 인증번호 확인 */
     @PostMapping("/signup/police/emailAuth")
     public ResponseEntity<ResponseDTO<?>> checkPolice(@RequestBody @Valid EmailCheckDto dto) {
         emailService.verifyCode(dto.getEmail(), dto.getAuthNum());
@@ -37,6 +37,7 @@ public class EmailController {
                 .body(new ResponseDTO<>(ResponseCode.SUCCESS_EMAIL_POLICE_ACCEPT, null));
     }
 
+    /** [일반] 이메일 인증번호 전송 */
     @PostMapping("/signup/general/email")
     public ResponseEntity<ResponseDTO<?>> sendGeneral(@RequestBody @Valid GeneralEmailRequestDto dto) {
         emailService.sendGeneralCode(dto.getEmail());
@@ -45,6 +46,7 @@ public class EmailController {
                 .body(new ResponseDTO<>(ResponseCode.SUCCESS_EMAIL_USER_SEND, null));
     }
 
+    /** [일반] 이메일 인증번호 확인 */
     @PostMapping("/signup/general/emailAuth")
     public ResponseEntity<ResponseDTO<?>> checkGeneral(@RequestBody @Valid GeneralEmailCheckDto dto) {
         emailService.verifyCode(dto.getEmail(), dto.getAuthNum());

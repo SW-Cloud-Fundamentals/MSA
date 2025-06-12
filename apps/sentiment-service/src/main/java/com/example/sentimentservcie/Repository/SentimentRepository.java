@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface SentimentRepository extends JpaRepository<SentimentEntity, Long> {
     List<SentimentEntity> findByArticleId(Long articleId);
-    Optional<SentimentEntity> findByCommentIdAndArticleId(Long commentId, Long articleId);
+
     Optional<SentimentEntity> findByCommentId(Long commentId);
-    void deleteByCommentIdAndArticleId(Long commentId, Long articleId);
 }

@@ -1,6 +1,8 @@
 package com.example.sentimentservcie.Service;
 
+import com.example.sentimentservcie.Code.ErrorCode;
 import com.example.sentimentservcie.Dto.ArticleSentimentSummary;
+import com.example.sentimentservcie.Exception.CustomException;
 import com.example.sentimentservcie.Model.Sentiment;
 import com.example.sentimentservcie.Model.SentimentEntity;
 import com.example.sentimentservcie.Repository.SentimentRepository;
@@ -17,6 +19,7 @@ public class SentimentService {
 
     private final SentimentRepository sentimentRepository;
 
+    /** 특정 기사에 대한 댓글 감정 통계 집계 */
     public List<ArticleSentimentSummary> getSentimentSummary(Long articleId) {
         List<SentimentEntity> entities = sentimentRepository.findByArticleId(articleId);
 
@@ -35,6 +38,7 @@ public class SentimentService {
                 .toList();
     }
 
+    /** ArticleSentimentSummary DTO 변환 헬퍼 */
     private ArticleSentimentSummary toSummary(String userRole,
                                               Map<Sentiment, Long> m) {
         return new ArticleSentimentSummary(

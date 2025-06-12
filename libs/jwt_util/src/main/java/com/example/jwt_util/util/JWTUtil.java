@@ -1,6 +1,5 @@
 package com.example.jwt_util.util;
 
-//import com.example.userservice.model.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -56,16 +55,4 @@ public class JWTUtil {
             return true;
         }
     }
-
-//    public String createJwt(String type, String username, String nickname, UserRole role, Long expiredMs) {
-//        return Jwts.builder()
-//                .claim("type", type)
-//                .claim("username", username)
-//                .claim("nickname", nickname)
-//                .claim("role", role)
-//                .issuedAt(new Date(System.currentTimeMillis()))
-//                .expiration(new Date(System.currentTimeMillis() + expiredMs))
-//                .signWith(secretKey)
-//                .compact();
-//    }
 }

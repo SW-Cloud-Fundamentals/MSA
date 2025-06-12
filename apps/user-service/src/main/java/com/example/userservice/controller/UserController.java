@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
+    /**
+     * [경찰] 회원가입
+     * */
     @PostMapping("/police")
     public ResponseEntity<ResponseDTO<?>> registerPoliceUser(@Valid @RequestBody RegisterUserDto registerUserDto) {
         userService.registerPolice(registerUserDto);
@@ -27,6 +30,9 @@ public class UserController {
                 .body(new ResponseDTO<>(ResponseCode.SUCCESS_POLICE_REGISTER, null));
     }
 
+    /**
+     * [일반] 회원가입
+     * */
     @PostMapping("/general")
     public ResponseEntity<ResponseDTO<?>> registerGeneralUser(@Valid @RequestBody RegisterUserDto registerUserDto) {
         userService.registerGeneral(registerUserDto);

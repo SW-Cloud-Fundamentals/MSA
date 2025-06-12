@@ -14,6 +14,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+/**
+ * KafkaConsumer
+ * 댓글 이벤트(CREATE/UPDATE/DELETE)를 Kafka로 받아와
+ * 감성분석 후 결과를 SentimentEntity(Repository)에 반영하는 서비스.
+ *   - Kafka 토픽: my_topic_comments
+ *   - ObjectMapper로 payload 파싱, 이벤트타입 분기 처리
+ *   - 감성 분석(OpenAI) 후 DB에 insert/update/delete
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -23,25 +31,24 @@ public class KafkaConsumer {
     private final OpenAIService openAIService;
     private final ObjectMapper mapper = new ObjectMapper();
 
-//    @Autowired
-//    public KafkaConsumer(SentimentRepository repository, OpenAIService openAIService) {
-//        this.repository = repository;
-//        this.openAIService = openAIService;
-//    }
-
+    /**
+     * Kafka 리스너 (댓글 토픽)
+     * @param raw Kafka에서 수신한 JSON 문자열
+     */
     @KafkaListener(topics = "my_topic_comments")
     public void handleCommentEvent(String raw) throws JsonProcessingException {
 
-//        ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> outer = mapper.readValue(raw, new TypeReference<>() {});
         Map<String, Object> payload = (Map<String, Object>) outer.get("payload");
 
-        if (payload == null) {      // tombstone/heartbeat 방어
+        // tombstone(삭제마커), heartbeat 등 방어
+        if (payload == null) {
             log.debug("skip empty payload");
             return;
         }
         log.info("😖 payload {}", payload);
 
+        // 주요 필드 파싱
         String eventType     = (String) payload.get("event_type");
         log.info("🤑 event_type check {}", eventType);
         Number art      = (Number) payload.get("article_id");   // ⭐ 스네이크 케이스
@@ -50,36 +57,30 @@ public class KafkaConsumer {
         String username = (String) payload.get("username");
         String userRole = (String) payload.get("role");
 
-        if (eventType == null || art == null || com == null || content == null || username == null || userRole == null) {                  // 추가 방어
+        // 추가 방어
+        if (eventType == null || art == null || com == null || content == null || username == null || userRole == null) {
             log.warn("필수 필드 누락 → skip : {}", payload);
             return;
         }
 
-        /* 3) 감성 분석(UPDATE·CREATE 시 필요) ----------------------------- */
+        /* 감성 분석(UPDATE·CREATE 시 필요) ----------------------------- */
         Sentiment newSentiment = openAIService.classifySentiment(content);
 
-        /* 4) 분기 처리 ---------------------------------------------------- */
+        /* 분기 처리 ---------------------------------------------------- */
         switch (eventType) {
             case "CREATE" -> handleCreate(art, com, username, userRole, newSentiment);
             case "UPDATE" -> handleUpdate(art, com, username, userRole, newSentiment);
             case "DELETE" -> handleDelete(com);
             default       -> log.warn("알 수 없는 eventType : {}", eventType);
         }
-
-//        SentimentEntity entity = SentimentEntity.builder()
-//                .articleId(art.longValue())
-//                .username(username)
-//                .userRole(userRole)
-//                .commentId(com.longValue())
-//                .sentiment(s)
-//                .build();
-//
-//        repository.save(entity);                           // 정상 처리 → 오프셋 커밋
-//        log.info("✅ saved sentiment {}", entity);
     }
 
     /* ---------- 세부 로직 메서드 ---------- */
 
+    /**
+     * CREATE 이벤트 처리
+     * - 이미 존재하면 무시, 없으면 새로 저장
+     */
     private void handleCreate(Number art, Number com, String username, String userRole, Sentiment sentiment) {
 
         repository.findByCommentId(com.longValue()).ifPresent(entity -> {
@@ -97,6 +98,10 @@ public class KafkaConsumer {
         log.info("✅ [CREATE] saved sentiment for comment {}", com);
     }
 
+    /**
+     * UPDATE 이벤트 처리
+     * - 존재 시 감성만 갱신, 미존재 시 새로 insert
+     */
     private void handleUpdate(Number art, Number com, String username, String userRole, Sentiment sentiment) {
 
         repository.findByCommentId(com.longValue())
@@ -118,6 +123,10 @@ public class KafkaConsumer {
                 });
     }
 
+    /**
+     * DELETE 이벤트 처리
+     * - 존재 시 삭제, 없으면 무시
+     */
     private void handleDelete(Number com) {
         repository.findByCommentId(com.longValue())
                 .ifPresentOrElse(entity -> {

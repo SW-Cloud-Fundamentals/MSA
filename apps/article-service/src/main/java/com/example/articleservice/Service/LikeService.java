@@ -26,7 +26,7 @@ public class LikeService {
         String username = jwtUtil.getUsername(token);
 
         Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND));
 
         if (likeRepository.existsByArticleAndUsername(article, username)) {
             throw new CustomException(ErrorCode.ALREADY_LIKED);
@@ -51,7 +51,7 @@ public class LikeService {
         String username = jwtUtil.getUsername(token);
 
         Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND));
 
         Like like = likeRepository.findByArticleAndUsername(article, username)
                 .orElseThrow(() -> new CustomException(ErrorCode.LIKE_NOT_FOUND));
@@ -67,7 +67,7 @@ public class LikeService {
     /** 3️⃣ 특정 기사의 공감 수 조회 */
     public Long countLikes(Long articleId) {
         Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND));
 
         return likeRepository.countByArticle(article);
     }

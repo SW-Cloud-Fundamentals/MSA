@@ -28,7 +28,7 @@ public class OpenAIService {
      */
     public Sentiment classifySentiment(String text) {
 
-        /* 1) 채팅 요청 JSON ― max_tokens 는 3 정도면 충분 */
+        /* 1) 채팅 요청 JSON ― max_tokens 는 3 */
         String body = """
             {
               "model": "%s",

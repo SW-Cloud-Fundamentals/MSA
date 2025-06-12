@@ -172,7 +172,6 @@ public class EmailService {
         if (!ev.getCode().equals(inputCode))
             throw new UnverifiedCodeException("인증번호가 일치하지 않습니다.");
 
-//        verifyRepo.delete(ev); // 단발성 사용 후 삭제
         ev.setVerified(true);
     }
 }
