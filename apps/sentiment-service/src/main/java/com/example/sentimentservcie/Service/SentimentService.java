@@ -1,8 +1,6 @@
 package com.example.sentimentservcie.Service;
 
-import com.example.sentimentservcie.Code.ErrorCode;
-import com.example.sentimentservcie.Dto.ArticleSentimentSummary;
-import com.example.sentimentservcie.Exception.CustomException;
+import com.example.sentimentservcie.Dto.Sentiment.ArticleSentimentSummary;
 import com.example.sentimentservcie.Model.Sentiment;
 import com.example.sentimentservcie.Model.SentimentEntity;
 import com.example.sentimentservcie.Repository.SentimentRepository;

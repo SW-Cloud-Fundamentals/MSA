@@ -1,8 +1,8 @@
 package com.example.sentimentservcie.Controller;
 
 import com.example.sentimentservcie.Code.ResponseCode;
-import com.example.sentimentservcie.Dto.ArticleSentimentSummary;
-import com.example.sentimentservcie.Dto.ResponseDTO;
+import com.example.sentimentservcie.Dto.Sentiment.ArticleSentimentSummary;
+import com.example.sentimentservcie.Dto.Sentiment.ResponseDTO;
 import com.example.sentimentservcie.Service.SentimentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

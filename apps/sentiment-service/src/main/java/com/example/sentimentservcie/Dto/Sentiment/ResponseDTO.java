@@ -1,4 +1,4 @@
-package com.example.sentimentservcie.Dto;
+package com.example.sentimentservcie.Dto.Sentiment;
 
 import com.example.sentimentservcie.Code.ResponseCode;
 import lombok.Data;

@@ -15,7 +15,8 @@ spring:
   cloud:
     gateway:
       routes:
-#        User
+#        user-service
+  #        회원 api
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
@@ -59,7 +60,8 @@ spring:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
 
-#        Article
+#        article-service
+  #        뉴스 api
         - id: article-service
           uri: lb://ARTICLE-SERVICE
           predicates:
@@ -68,7 +70,7 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/article-service/(?<segment>.*), /$\{segment}
-#        Comments
+  #        댓글 api
         - id: article-service
           uri: lb://ARTICLE-SERVICE
           predicates:
@@ -104,7 +106,7 @@ spring:
             - RemoveRequestHeader=Cookie
             - RewritePath=/article-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
-#         Likes
+  #         공감 api
         - id: article-service
           uri: lb://ARTICLE-SERVICE
           predicates:
@@ -114,7 +116,7 @@ spring:
             - RemoveRequestHeader=Cookie
             - RewritePath=/article-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
-#         Rank
+  #         랭킹 api
         - id: article-service
           uri: lb://ARTICLE-SERVICE
           predicates:
@@ -124,7 +126,8 @@ spring:
             - RemoveRequestHeader=Cookie
             - RewritePath=/article-service/(?<segment>.*), /$\{segment}
 
-#         Sentiment
+#          sentiment-service
+  #         감정 api
         - id: sentiment-service
           uri: lb://SENTIMENT-SERVICE
           predicates:
