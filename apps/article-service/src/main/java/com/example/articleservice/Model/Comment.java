@@ -42,7 +42,7 @@ public class Comment implements Serializable {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     @Column
