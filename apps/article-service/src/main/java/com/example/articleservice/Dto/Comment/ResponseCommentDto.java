@@ -18,6 +18,7 @@ public class ResponseCommentDto {
     private String eventType;
     private String content;
     private String username;
+    private String nickname;
     private String role;
     private Long articleId;
     private LocalDateTime createdAt;
@@ -28,6 +29,7 @@ public class ResponseCommentDto {
                 .eventType(comment.getEventType())
                 .content(comment.getContent())
                 .username(comment.getUsername())
+                .nickname(comment.getNickname())
                 .role(comment.getRole())
                 .articleId(comment.getArticleId().getId())
                 .createdAt(comment.getCreatedAt())

@@ -46,11 +46,12 @@ public class CommentService {
 
         String role = jwtUtil.getRole(token);
         String username = jwtUtil.getUsername(token);
+        String nickname = jwtUtil.getNickname(token);
 
         Article article = articleRepository.findById(requestDto.getArticleId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND));
 
-        Comment comment = Comment.fromRequestDto(requestDto, username, role, article);
+        Comment comment = Comment.fromRequestDto(requestDto, username, nickname, role, article);
         comment.updateEvent("CREATE");  // Kafka에 보낼 eventType 설정
         // 랭킹 시스템에 댓글 추가 전달
         rankService.updateScore(requestDto.getArticleId(), 0, +1);

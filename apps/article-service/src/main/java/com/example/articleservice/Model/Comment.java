@@ -27,6 +27,9 @@ public class Comment implements Serializable {
     private String username;
 
     @Column
+    private String nickname;
+
+    @Column
     private String role;
 
     @ManyToOne
@@ -59,10 +62,11 @@ public class Comment implements Serializable {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public static Comment fromRequestDto(RequestCommentDto requestDto, String username, String role, Article article) {
+    public static Comment fromRequestDto(RequestCommentDto requestDto, String username, String nickname, String role, Article article) {
         return Comment.builder()
                 .content(requestDto.getContent())
                 .username(username)
+                .nickname(nickname)
                 .role(role)
                 .articleId(article)
                 .build();

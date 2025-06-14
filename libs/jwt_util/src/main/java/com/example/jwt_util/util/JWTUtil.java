@@ -39,6 +39,8 @@ public class JWTUtil {
         return parse(token).get("userId", Long.class);
     }
 
+    public String getNickname(String token) {return parse(token).get("nickname", String.class);}
+
     /** role 예시 */
     public String getRole(String token) {
         return parse(token).get("role", String.class);
