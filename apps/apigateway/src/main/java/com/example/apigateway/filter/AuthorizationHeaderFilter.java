@@ -3,6 +3,7 @@ package com.example.apigateway.filter;
 import com.example.jwt_util.util.JWTUtil;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,10 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
+
+            if (exchange.getRequest().getMethod() == HttpMethod.OPTIONS) {
+                return chain.filter(exchange); // preflight 건드리지 않음
+            }
 
             // 1) Authorization 헤더 존재 여부
             if (!request.getHeaders().containsKey("Authorization")) {

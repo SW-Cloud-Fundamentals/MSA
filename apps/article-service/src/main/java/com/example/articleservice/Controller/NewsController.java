@@ -1,6 +1,7 @@
 package com.example.articleservice.Controller;
 
 import com.example.articleservice.Code.ResponseCode;
+import com.example.articleservice.Dto.News.ArticleCount;
 import com.example.articleservice.Dto.News.ArticleDetail;
 import com.example.articleservice.Dto.News.ArticleListResponse;
 import com.example.articleservice.Dto.Response.ResponseDTO;
@@ -23,6 +24,12 @@ public class NewsController {
             @RequestParam(required = false, defaultValue = "마약") String keyword
     ) {
         return ResponseEntity.ok(new ResponseDTO<>(ResponseCode.SUCCESS_GET_ARTICLE, newsSearchService.searchList(keyword)));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<ArticleCount> searchCount(
+            @RequestParam(required = false, defaultValue = "마약") String keyword) {
+        return ResponseEntity.ok(newsSearchService.searchCount(keyword));
     }
 
     /** 2️⃣ articleId 값으로 해당 기사의 상세정보 조회 */

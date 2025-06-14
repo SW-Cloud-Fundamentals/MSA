@@ -1,5 +1,6 @@
 package com.example.articleservice.Service;
 
+import com.example.articleservice.Dto.News.ArticleCount;
 import com.example.articleservice.Dto.News.ArticleDetail;
 import com.example.articleservice.Dto.News.ArticleListResponse;
 import com.example.articleservice.Dto.News.NaverNewsResponse;
@@ -103,6 +104,11 @@ public class NewsSearchService {
                             .build();
                 })
                 .collect(Collectors.toList());
+    }
+
+    public ArticleCount searchCount(String keyword) {
+        long cnt = articleRepository.countByKeyword(keyword);
+        return new ArticleCount(keyword, cnt);
     }
 
     /** 상세 조회 (본문·댓글 수 등) */

@@ -28,8 +28,9 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {}) // CORS 활성화
+//                .cors(cors -> {}) // CORS 활성화
                 .authorizeExchange(exchange -> exchange
+                        .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .pathMatchers("/user-service/users/me").authenticated()
                         .pathMatchers(HttpMethod.POST,
                                 "/article-service/comments/**").authenticated()
