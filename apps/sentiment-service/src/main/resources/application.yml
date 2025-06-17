@@ -6,7 +6,7 @@ spring:
     name: sentiment-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/scene?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://mysql:3306/scene?serverTimezone=Asia/Seoul
     username: root
     password: ${spring.datasource.password}
 
@@ -31,3 +31,13 @@ eureka:
 openai:
   api-key: ${openai.api-key}
   model: gpt-3.5-turbo-16k
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, busrefresh
+
+logging:
+  level:
+    com.example.sentimentservcie: DEBUG

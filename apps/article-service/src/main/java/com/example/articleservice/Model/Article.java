@@ -40,10 +40,12 @@ public class Article implements Serializable {
 
     // 공감 수 (기본값 0)
     @Column(nullable = false)
+    @Builder.Default
     private Long likes = 0L;
 
     // 댓글 수 (기본값 0)
     @Column(nullable = false)
+    @Builder.Default
     private Long commentCount = 0L;
 
     /** INSERT 직전 → createdAt 을 now() */

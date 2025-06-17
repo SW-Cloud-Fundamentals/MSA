@@ -38,15 +38,15 @@ public class KafkaConsumer {
     @KafkaListener(topics = "my_topic_comments")
     public void handleCommentEvent(String raw) throws JsonProcessingException {
 
-        Map<String, Object> outer = mapper.readValue(raw, new TypeReference<>() {});
-        Map<String, Object> payload = (Map<String, Object>) outer.get("payload");
+        Map<String, Object> payload = mapper.readValue(raw, new TypeReference<>() {});
+//        Map<String, Object> payload = (Map<String, Object>) outer.get("payload");
 
         // tombstone(삭제마커), heartbeat 등 방어
-        if (payload == null) {
-            log.debug("skip empty payload");
-            return;
-        }
-        log.info("😖 payload {}", payload);
+//        if (payload == null) {
+//            log.debug("skip empty payload");
+//            return;
+//        }
+//        log.info("😖 payload {}", payload);
 
         // 주요 필드 파싱
         String eventType     = (String) payload.get("event_type");

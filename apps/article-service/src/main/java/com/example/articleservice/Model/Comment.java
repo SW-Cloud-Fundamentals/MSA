@@ -46,6 +46,7 @@ public class Comment implements Serializable {
     private LocalDateTime updatedAt;
 
     @Column
+    @Builder.Default
     private boolean deleted = false;
 
     /** INSERT 직전 → 두 컬럼 모두 now() */
