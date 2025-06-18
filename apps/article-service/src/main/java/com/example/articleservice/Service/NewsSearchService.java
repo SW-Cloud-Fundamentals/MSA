@@ -11,6 +11,7 @@ import com.example.articleservice.Repository.CommentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class NewsSearchService {
 
     private final CommentRepository commentRepository;
@@ -67,12 +69,20 @@ public class NewsSearchService {
                             item.getLink(),
                             item.getDescription(),
                             item.getPubDate(),
-                            keyword
-                    );
+                            keyword);
                 }
 
                 // 3) 본문·이미지 크롤링 (이제 무조건 NAVER_ARTICLE 패턴이므로 바로 실행)
                 ArticleDetail detail = crawlNaverArticle(item);
+
+                /* ---------- ❗ 필수 필드 누락 검사 ---------- */
+                if (detail.getTitle() == null
+                        || detail.getContent() == null
+                        || detail.getImageUrl() == null) {
+                    log.debug("🚫 누락된 필드가 있어 저장하지 않습니다 → {}", item.getLink());
+                    continue;   // ↓ 아래 로직(세터·save) 모두 스킵
+                }
+
                 article.setTitle(detail.getTitle());
                 article.setContent(detail.getContent());
                 article.setImageUrl(detail.getImageUrl());
