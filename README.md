@@ -29,18 +29,6 @@
 
 <br>
 
-## 🛠 기술 스택
-
-| **분야**      | **기술 스택**                                                                                                                                                                                                                                                                                                                             |
-|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Frontend**  |![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=ffffff) <img src="https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"> |
-| **Backend**   | <img src="https://img.shields.io/badge/Java-007396?style=flat-square&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=spring&logoColor=white"> |
-| **Database**  | <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white">                                                                                                                                                                                                                                       |
-| **DevOps**    | <img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazonwebservices&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white"> <img src="https://img.shields.io/badge/RabbitMQ-FF6600?style=flat-square&logo=rabbitmq&logoColor=white"> <img src="https://img.shields.io/badge/Apache%20Kafka-231F20?style=flat-square&logo=apachekafka&logoColor=white">                    |
-| **Tools**     | <img src="https://img.shields.io/badge/Discord-5865F2?style=flat-square&logo=discord&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/Notion-000000?style=flat-square&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"> |
-
-<br>
-
 ## 🌈 배경ㆍ문제 인식
 
 - 강력범죄 보도 시 경찰 공권력의 한계와 시민의 분노ㆍ불신이 공존
@@ -89,6 +77,20 @@
 - 서비스 소개 페이지
 <img src="https://github.com/user-attachments/assets/e2266678-21e4-4aab-8772-23653b287744" alt="iPhone 13 Pro (17)" width="170" />
 <img src="https://github.com/user-attachments/assets/fbe04f00-47fa-47cf-ac48-0d7abfe809d4" alt="iPhone 13 Pro (18)" width="170" />
+
+
+<br>
+
+## 🛠 기술 스택
+
+| **분야**      | **기술 스택**                                                                                                                                                                                                                                                                                                                             |
+|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Frontend**  |![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=ffffff) <img src="https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"> |
+| **Backend**   | <img src="https://img.shields.io/badge/Java-007396?style=flat-square&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=spring&logoColor=white"> |
+| **Database**  | <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white">                                                                                                                                                                                                                                        |
+| **DevOps**    | <img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazonwebservices&logoColor=white">                                                                                                                  |
+| **Tools**     | <img src="https://img.shields.io/badge/Discord-5865F2?style=flat-square&logo=discord&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/Notion-000000?style=flat-square&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"> |
+
 
 
 <br>
