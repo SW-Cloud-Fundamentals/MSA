@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 public class Comment implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
 
     // CREATE || UPDATE || DELETE
@@ -63,13 +64,14 @@ public class Comment implements Serializable {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public static Comment fromRequestDto(RequestCommentDto requestDto, String username, String nickname, String role, Article article) {
+    public static Comment fromRequestDto(RequestCommentDto requestDto, String username, String nickname, String role, Article article, String eventType) {
         return Comment.builder()
                 .content(requestDto.getContent())
                 .username(username)
                 .nickname(nickname)
                 .role(role)
                 .articleId(article)
+                .eventType(eventType)
                 .build();
     }
 

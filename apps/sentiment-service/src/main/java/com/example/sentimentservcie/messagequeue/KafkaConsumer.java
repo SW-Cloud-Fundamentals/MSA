@@ -38,24 +38,33 @@ public class KafkaConsumer {
     @KafkaListener(topics = "my_topic_comments")
     public void handleCommentEvent(String raw) throws JsonProcessingException {
 
-        Map<String, Object> payload = mapper.readValue(raw, new TypeReference<>() {});
-//        Map<String, Object> payload = (Map<String, Object>) outer.get("payload");
+        /* ❶ 스키마 래핑(payload) 여부 판단 ----------------------------- */
+        Map<String, Object> outer = mapper.readValue(raw, new TypeReference<>() {});
+        if (outer.containsKey("schema")) {     // 💥 CDC 메시지
+            log.debug("skip CDC message");
+            return;
+        }
 
-        // tombstone(삭제마커), heartbeat 등 방어
-//        if (payload == null) {
-//            log.debug("skip empty payload");
-//            return;
-//        }
-//        log.info("😖 payload {}", payload);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> payload =
+                outer.containsKey("payload") && outer.get("payload") instanceof Map
+                        ? (Map<String, Object>) outer.get("payload")  // {"schema":..,"payload":{…}}
+                        : outer;                                       // {…} ← 이미 순수 JSON
+
+        /* ❷ tombstone・heartbeat 방어 -------------------------------- */
+        if (payload.isEmpty()) {
+            log.debug("skip empty payload");
+            return;
+        }
 
         // 주요 필드 파싱
-        String eventType     = (String) payload.get("event_type");
+        String eventType = (String) payload.getOrDefault("eventType", payload.get("event_type"));
         log.info("🤑 event_type check {}", eventType);
-        Number art      = (Number) payload.get("article_id");   // ⭐ 스네이크 케이스
-        Number com      = (Number) payload.get("id");           // comment PK
-        String content  = (String) payload.get("content");
-        String username = (String) payload.get("username");
-        String userRole = (String) payload.get("role");
+        Number art       = (Number) payload.getOrDefault("articleId", payload.get("article_id"));
+        Number com        = (Number) payload.get("id");
+        String content    = (String) payload.get("content");
+        String username   = (String) payload.get("username");
+        String userRole  = (String) payload.getOrDefault("userRole", payload.get("role"));
 
         // 추가 방어
         if (eventType == null || art == null || com == null || content == null || username == null || userRole == null) {
@@ -83,9 +92,10 @@ public class KafkaConsumer {
      */
     private void handleCreate(Number art, Number com, String username, String userRole, Sentiment sentiment) {
 
-        repository.findByCommentId(com.longValue()).ifPresent(entity -> {
+        if (repository.existsByCommentId(com.longValue())) {     // ✅ 이미 있으면 바로 종료
             log.info("이미 존재하는 commentId → 중복 CREATE 무시 : {}", com);
-        });
+            return;
+        }
 
         repository.save(SentimentEntity.builder()
                 .articleId(art.longValue())

@@ -10,4 +10,6 @@ public interface SentimentRepository extends JpaRepository<SentimentEntity, Long
     List<SentimentEntity> findByArticleId(Long articleId);
 
     Optional<SentimentEntity> findByCommentId(Long commentId);
+
+    boolean existsByCommentId(long l);
 }

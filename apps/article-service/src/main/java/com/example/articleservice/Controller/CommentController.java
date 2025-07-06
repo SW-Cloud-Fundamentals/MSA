@@ -5,8 +5,10 @@ import com.example.articleservice.Dto.Comment.CommentMessage;
 import com.example.articleservice.Dto.Comment.RequestCommentDto;
 import com.example.articleservice.Dto.Comment.ResponseCommentDto;
 import com.example.articleservice.Dto.Response.ResponseDTO;
+import com.example.articleservice.Model.Snowflake;
 import com.example.articleservice.Service.CommentService;
 import com.example.articleservice.messagequeue.KafkaProducer;
+import com.example.jwt_util.util.JWTUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ public class CommentController {
 
     private final CommentService commentService;
     private final KafkaProducer kafkaProducer;
+    private final JWTUtil jwt;
 
     /**
      * 1️⃣ 특정 기사 ID에 대한 댓글 생성
@@ -36,16 +39,18 @@ public class CommentController {
         dto.setArticleId(articleId);
 
         String token = authHeader.substring("Bearer ".length());
+        long commentId = Snowflake.nextId();
 
-        ResponseCommentDto response = commentService.createComment(dto, token);
+//        ResponseCommentDto response = commentService.createComment(dto, token);
 
         CommentMessage event = CommentMessage.builder()
-                .id(response.getId())
-                .eventType(response.getEventType())
-                .articleId(response.getArticleId())
-                .content(response.getContent())
-                .username(response.getUsername())
-                .userRole(response.getRole())
+                .id(commentId)
+                .eventType("CREATE")
+                .articleId(articleId)
+                .content(dto.getContent())
+                .username(jwt.getUsername(token))
+                .nickname(jwt.getNickname(token))
+                .userRole(jwt.getRole(token))
                 .build();
 
         log.info("🚀 PRODUCE : {}", event);
@@ -53,7 +58,7 @@ public class CommentController {
         /* send this comment to the kafka */
         kafkaProducer.send("my_topic_comments", event);
 
-        return ResponseEntity.ok(new ResponseDTO<>(ResponseCode.SUCCESS_CREATE_COMMENT, response));
+        return ResponseEntity.accepted().build();
     }
 
     /** 2️⃣ 전체 댓글 조회 */

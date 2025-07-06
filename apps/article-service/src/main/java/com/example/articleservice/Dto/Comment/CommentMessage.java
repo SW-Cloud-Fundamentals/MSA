@@ -1,7 +1,9 @@
 package com.example.articleservice.Dto.Comment;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -10,6 +12,8 @@ import java.io.Serializable;
  * CommentEntity와 필드명을 맞추기를 권장
  * */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class CommentMessage implements Serializable {
     private Long id;
@@ -17,5 +21,6 @@ public class CommentMessage implements Serializable {
     private Long articleId;
     private String content;
     private String username;
+    private String nickname;
     private String userRole;
 }
